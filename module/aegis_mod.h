@@ -6,7 +6,7 @@
 
 /* 모듈 메타데이터 */
 #define AEGIS_MODULE_NAME    "aegis-mod"
-#define AEGIS_MODULE_VERSION "0.1.0"
+#define AEGIS_MODULE_VERSION "0.0.1"
 
 /* apache 디폴트 설정 */
 #define AEGIS_DEFAULT_SOCKET   "/var/run/aegis/agent.sock"

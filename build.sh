@@ -10,4 +10,5 @@ if [ ! -d "build" ]; then
     mkdir build
 fi
 
+rm -f build/*;
 cd module && zip ../build/aegis-mod.zip *
