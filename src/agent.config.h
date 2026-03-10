@@ -3,7 +3,10 @@
 #include<string>
 using namespace std;
 
+/* aegis-agent 설정 경로 */
 #define AEGIS_AGENT_CONFIG_PATH "/etc/aegis/agent.conf"
+
+/* 설정 기본값 */
 #define CONFIG_DEFAULT_AGENT_SOCKET_PATH "/var/run/aegis/agent.sock"
 
 typedef struct {

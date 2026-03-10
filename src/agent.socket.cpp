@@ -1,4 +1,5 @@
 #include "agent.socket.h"
+#include<sys/socket.h>
 #include<sstream>
 
 AegisSocketServer::AegisSocketServer(string socket_path) {
@@ -7,7 +8,13 @@ AegisSocketServer::AegisSocketServer(string socket_path) {
 
 AegisSocketServer::~AegisSocketServer() {}
 
-void AegisSocketServer::_process() {
+bool AegisSocketServer::start() {
+}
+
+void AegisSocketServer::stop() {
+}
+
+void AegisSocketServer::loop() {
 }
 
 bool AegisSocketServer::parse_message(char *buf, size_t len, AegisMessage &out) {

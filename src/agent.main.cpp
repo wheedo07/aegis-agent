@@ -10,4 +10,9 @@ int main(int argc, char *argv[]) {
         }
     } 
     agent->context.config = load_config(config_path);
+
+    agent->_ready();
+    while(agent->is_running()) {
+        agent->_process();
+    }
 }

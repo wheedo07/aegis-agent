@@ -1,6 +1,8 @@
 #ifndef __AEGIS_AGENT_SOCKET_H__
 #define __AEGIS_AGENT_SOCKET_H__
 #include<string>
+#include<queue>
+#include<atomic>
 #include<functional>
 using namespace std;
 
@@ -29,7 +31,9 @@ class AegisSocketServer {
     private:
         int fd = -1;
         string socket_path;
+        queue<string> msg_queue;
         function<void(AegisMessage msg)> callback;
+        atomic<bool> running = false;
 
         bool parse_message(char *buf, size_t len, AegisMessage &out);
 
@@ -37,7 +41,12 @@ class AegisSocketServer {
         AegisSocketServer(string socket_path);
         ~AegisSocketServer();
 
-        void _process();
+        bool start();
+        void stop();
+        void loop();
+        bool is_running() {
+            return running.load();
+        }
         void on_message(function<void(AegisMessage msg)> callback) {
             this->callback = callback;
         }

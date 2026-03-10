@@ -11,8 +11,8 @@ void AegisAgent::_ready() {
     socket_server = new AegisSocketServer(context.config.agent_socket_path);
     socket_server->on_message([this](AegisMessage msg) {
     });
+    running = socket_server->start();
 }
 
 void AegisAgent::_process() {
-    if(socket_server) socket_server->_process();
 }
