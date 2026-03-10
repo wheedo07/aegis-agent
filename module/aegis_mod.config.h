@@ -1,6 +1,5 @@
 #ifndef __AEGIS_MOD_CONFIG_H__
 #define __AEGIS_MOD_CONFIG_H__
-
 #include "httpd.h"
 #include "http_config.h"
 #include "ap_config.h"

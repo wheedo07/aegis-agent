@@ -11,4 +11,7 @@ if [ ! -d "build" ]; then
 fi
 
 rm -f build/*;
-cd module && zip ../build/aegis-mod.zip *
+cd module && zip ../build/aegis-mod.zip *;
+cd ..;
+zip build/aegis-agent.zip src/*;
+cd conf && zip ../build/aegis-agent.zip *;
