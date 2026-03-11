@@ -12,8 +12,7 @@ jsoncpp-static
 WORKDIR /build
 COPY src ./src
 
-RUN g++ -std=c++17 -O2 -Wall -static \
--I/usr/include/jsoncpp \
+RUN g++ -std=c++17 -O2 -Wall -static -s \
 ./src/*.cpp \
 -o aegis-agent \
 -lcurl -ljsoncpp -lpthread
