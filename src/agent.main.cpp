@@ -1,7 +1,12 @@
 #include "agent.h"
+AegisAgent *agent = new AegisAgent();
+
+static void signal_handler(int sig) {
+    printf("[aegis-agent] received signal %d, shutting down...\n", sig);
+    if(agent) agent->stop();
+}
 
 int main(int argc, char *argv[]) {
-    AegisAgent* agent = new AegisAgent();
     string config_path = AEGIS_AGENT_CONFIG_PATH;
     if(argc >= 3) {
         string arg = argv[1];
@@ -10,9 +15,5 @@ int main(int argc, char *argv[]) {
         }
     } 
     agent->context.config = load_config(config_path);
-
-    agent->_ready();
-    while(agent->is_running()) {
-        agent->_process();
-    }
+    agent->start();
 }

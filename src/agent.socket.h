@@ -1,10 +1,17 @@
 #ifndef __AEGIS_AGENT_SOCKET_H__
 #define __AEGIS_AGENT_SOCKET_H__
 #include<string>
+#include<vector>
+#include<thread>
+#include<mutex>
+#include<condition_variable>
 #include<queue>
 #include<atomic>
 #include<functional>
 using namespace std;
+
+#define AEGIS_RECV_BUF_SIZE 8192
+#define AEGIS_WORKER_COUNT 4
 
 typedef struct {
     string version;
@@ -31,11 +38,14 @@ class AegisSocketServer {
     private:
         int fd = -1;
         string socket_path;
+        vector<thread> workers;
         queue<string> msg_queue;
+        mutex queue_mutex;
+        condition_variable cv;
         function<void(AegisMessage msg)> callback;
         atomic<bool> running = false;
 
-        bool parse_message(char *buf, size_t len, AegisMessage &out);
+        bool parse_message(const char *buf, size_t len, AegisMessage &out);
 
     public:
         AegisSocketServer(string socket_path);

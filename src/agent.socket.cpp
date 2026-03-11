@@ -1,23 +1,109 @@
 #include "agent.socket.h"
 #include<sys/socket.h>
+#include<sys/un.h>
+#include<sys/stat.h>
+#include<unistd.h>
 #include<sstream>
+#include<cstring>
+#include<iostream>
 
 AegisSocketServer::AegisSocketServer(string socket_path) {
     this->socket_path = socket_path;
 }
 
-AegisSocketServer::~AegisSocketServer() {}
+AegisSocketServer::~AegisSocketServer() {
+    stop();
+}
 
 bool AegisSocketServer::start() {
+    fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if(fd < 0) {
+        cerr << "[aegis-agent] socket() failed: " << strerror(errno) << endl;
+        return false;
+    }
+    ::unlink(socket_path.c_str());
+
+    struct sockaddr_un addr{};
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, socket_path.c_str(), sizeof(addr.sun_path) - 1);
+
+    if(bind(fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        cerr << "[aegis-agent] bind(" << socket_path << ") failed: " << strerror(errno) << endl;
+        ::close(fd);
+        fd = -1;
+        return false;
+    }
+    
+    chmod(socket_path.c_str(), 0666);
+
+    running = true;
+
+    for(int i=0; i < AEGIS_WORKER_COUNT; i++) {
+        workers.emplace_back(&AegisSocketServer::loop, this);
+    }
+    cout << "[aegis-agent] listening on " << socket_path << endl;
+
+    char buf[AEGIS_RECV_BUF_SIZE];
+    while(running.load()) {
+        ssize_t len = recvfrom(fd, buf, sizeof(buf) - 1, 0, nullptr, nullptr);
+        if(len < 0) {
+            if(errno == EINTR) continue;
+            cerr << "[aegis-agent] recvfrom() failed: " << strerror(errno) << endl;
+            break;
+        }
+        buf[len] = '\0';
+
+        {
+            lock_guard<mutex> lock(queue_mutex);
+            msg_queue.emplace(buf, len);
+        }
+        cv.notify_one();
+    }
+
+    return true;
 }
 
 void AegisSocketServer::stop() {
+    if(!running.exchange(false)) return;
+    cv.notify_all();
+
+    for(auto &t : workers) {
+        if(t.joinable()) t.join();
+    }
+    workers.clear();
+
+    if(fd >= 0) {
+        ::close(fd);
+        fd = -1;
+        ::unlink(socket_path.c_str());
+    }
+    printf("[aegis-agent] stopped\n");
 }
 
 void AegisSocketServer::loop() {
+    while(true) {
+        string raw;
+        {
+            unique_lock<mutex> lock(queue_mutex);
+            cv.wait(lock, [this]() {
+                return !msg_queue.empty() || !running.load();
+            });
+
+            if(!running.load() && msg_queue.empty()) break;
+
+            raw = move(msg_queue.front());
+            msg_queue.pop();
+        }
+
+        {
+            AegisMessage msg;
+            if(!parse_message(raw.c_str(), raw.size(), msg)) continue;
+            if(callback) callback(msg);
+        }
+    }
 }
 
-bool AegisSocketServer::parse_message(char *buf, size_t len, AegisMessage &out) {
+bool AegisSocketServer::parse_message(const char *buf, size_t len, AegisMessage &out) {
     if(!buf || len == 0) return false;
 
     istringstream ss(string(buf, len));

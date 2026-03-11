@@ -7,12 +7,18 @@ AegisAgent::AegisAgent() {
 
 AegisAgent::~AegisAgent() {}
 
-void AegisAgent::_ready() {
+void AegisAgent::start() {
     socket_server = new AegisSocketServer(context.config.agent_socket_path);
     socket_server->on_message([this](AegisMessage msg) {
     });
-    running = socket_server->start();
+
+    if(socket_server->start()) printf("[aegis-agent] Agent successfully shut down\n");
 }
 
-void AegisAgent::_process() {
+void AegisAgent::stop() {
+    if(socket_server) {
+        socket_server->stop();
+        delete socket_server;
+        socket_server = nullptr;
+    }
 }

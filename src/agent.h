@@ -11,8 +11,7 @@ typedef struct {
 class AegisSocketServer;
 class AegisAgent {
     private:
-        bool running = false;
-        AegisSocketServer* socket_server;
+        AegisSocketServer *socket_server;
 
     public:
         AgentContext context;
@@ -21,12 +20,8 @@ class AegisAgent {
         AegisAgent();
         ~AegisAgent();
 
-        bool is_running() {
-            return running;
-        }
-
-        void _ready();
-        void _process();
+        void start();
+        void stop();
 };
 
 #endif
