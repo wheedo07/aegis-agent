@@ -1,8 +1,9 @@
 #include "agent.h"
+#include<csignal>
 AegisAgent *agent = new AegisAgent();
 
 static void signal_handler(int sig) {
-    printf("[aegis-agent] received signal %d, shutting down...\n", sig);
+    printf("[aegis-agent] shutting down...\n");
     if(agent) agent->stop();
 }
 
@@ -15,5 +16,11 @@ int main(int argc, char *argv[]) {
         }
     } 
     agent->context.config = load_config(config_path);
+
+    signal(SIGTERM, signal_handler);
+    signal(SIGINT, signal_handler);
+
     agent->start();
+
+    return 0;
 }
