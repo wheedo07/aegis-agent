@@ -1,4 +1,5 @@
 #include "agent.h"
+#include "agent.http.h"
 #include "agent.socket.h"
 
 AegisAgent::AegisAgent() {
@@ -9,6 +10,7 @@ AegisAgent::~AegisAgent() {}
 
 void AegisAgent::start() {
     socket_server = new AegisSocketServer(context.config.agent_socket_path);
+    http_server = new AegisHttpServer();
     socket_server->on_message([this](AegisMessage msg) {
     });
 
@@ -20,5 +22,9 @@ void AegisAgent::stop() {
         socket_server->stop();
         delete socket_server;
         socket_server = nullptr;
+    }
+    if(http_server) {
+        delete http_server;
+        http_server = nullptr;
     }
 }

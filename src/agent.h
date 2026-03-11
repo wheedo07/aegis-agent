@@ -9,9 +9,11 @@ typedef struct {
 } AgentContext;
 
 class AegisSocketServer;
+class AegisHttpServer;
 class AegisAgent {
     private:
         AegisSocketServer *socket_server;
+        AegisHttpServer *http_server;
 
     public:
         AgentContext context;

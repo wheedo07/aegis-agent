@@ -2,7 +2,7 @@
 
 dir=$(basename "$PWD")
 if [[ "$dir" != "agent" && "$dir" !=  "aegis-agent" ]]; then
-    echo "프로젝트 ROOT에서 실행해주세요"
+    echo "프로젝트 ROOT 경로에서 실행해주세요"
     exit 1
 fi
 
@@ -13,5 +13,7 @@ fi
 rm -f build/*;
 cd module && zip ../build/aegis-mod.zip *;
 cd ..;
-zip build/aegis-agent.zip src/*;
-cd conf && zip ../build/aegis-agent.zip *;
+docker build -f Dockerfile -t aegis-agent . && \
+docker create --name tmp aegis-agent /aegis-agent && \
+docker cp tmp:/aegis-agent ./build/aegis-agent && \
+docker rm tmp

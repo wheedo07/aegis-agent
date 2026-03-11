@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
         if(arg == "--config" || arg == "-c") {
             config_path = argv[2];
         }
-    } 
+    }
     agent->context.config = load_config(config_path);
 
     signal(SIGTERM, signal_handler);
