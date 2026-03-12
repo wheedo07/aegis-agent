@@ -13,7 +13,7 @@ AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
     AegisHttpResponse response;
     if(!curl) return response;
 
-    string url = msg.control_url + "/api/v1/ingest";
+    string url = msg.control_url + AEGIS_HTTP_API_PATH;
     string body = build_json(msg);
     string response_string;
 
@@ -27,7 +27,7 @@ AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_cb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 2000L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, AEGIS_HTTP_TIMEOUT_MS);
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 
     CURLcode res = curl_easy_perform(curl);

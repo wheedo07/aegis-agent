@@ -51,7 +51,9 @@ class AegisSocketServer {
         AegisSocketServer(string socket_path);
         ~AegisSocketServer();
 
+        /* 끝나는 시점까지 반환을 대기 */
         bool start();
+        
         void stop();
         void loop();
         void on_message(function<void(AegisMessage msg)> callback) {

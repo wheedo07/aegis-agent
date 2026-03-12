@@ -6,6 +6,9 @@
 #include<string>
 using namespace std;
 
+#define AEGIS_HTTP_API_PATH "/api/v1/ingest"
+#define AEGIS_HTTP_TIMEOUT_MS 2000L
+
 typedef struct {
     bool block = false;
     string reason;

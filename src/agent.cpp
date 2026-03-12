@@ -5,6 +5,7 @@
 
 AegisAgent::AegisAgent() {
     socket_server = nullptr;
+    http_server = nullptr;
 }
 
 AegisAgent::~AegisAgent() {}
