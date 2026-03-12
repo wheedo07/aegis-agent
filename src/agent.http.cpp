@@ -11,7 +11,6 @@ AegisHttpServer::~AegisHttpServer() {
 
 AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
     AegisHttpResponse response;
-
     if(!curl) return response;
 
     string url = msg.control_url + "/api/v1/ingest";
