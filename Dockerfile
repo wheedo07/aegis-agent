@@ -31,10 +31,10 @@ COPY src ./src
 
 RUN g++ -std=c++17 -O2 -Wall -static -s \
 ./src/*.cpp \
--o aegis-agent \
+-o aegis-agent_x86_64 \
 $(pkg-config --libs --static libcurl) \
 -ljsoncpp -lpthread
 
 FROM scratch
-COPY --from=builder /build/aegis-agent /aegis-agent
-CMD ["/aegis-agent"]
+COPY --from=builder /build/aegis-agent_x86_64 /aegis-agent_x86_64
+CMD ["/aegis-agent_x86_64"]

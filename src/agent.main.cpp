@@ -3,7 +3,7 @@
 AegisAgent *agent = new AegisAgent();
 
 static void signal_handler(int sig) {
-    printf("[aegis-agent] shutting down...\n");
+    printf("\n[aegis-agent] shutting down...\n");
     if(agent) agent->stop();
 }
 

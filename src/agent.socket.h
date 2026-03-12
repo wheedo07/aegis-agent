@@ -54,9 +54,6 @@ class AegisSocketServer {
         bool start();
         void stop();
         void loop();
-        bool is_running() {
-            return running.load();
-        }
         void on_message(function<void(AegisMessage msg)> callback) {
             this->callback = callback;
         }

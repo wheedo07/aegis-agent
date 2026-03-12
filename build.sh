@@ -14,8 +14,8 @@ rm -f build/*;
 cd module && zip ../build/aegis-mod.zip *;
 cd ..;
 docker build -f Dockerfile -t aegis-agent . && \
-docker create --name tmp aegis-agent /aegis-agent && \
-docker cp tmp:/aegis-agent ./conf/aegis-agent && \
+docker create --name tmp aegis-agent /aegis-agent_x86_64 && \
+docker cp tmp:/aegis-agent_x86_64 ./conf/aegis-agent_x86_64 && \
 docker rm tmp;
 cd conf;
-zip ../build/aegis-agent.zip * && rm aegis-agent;
+zip ../build/aegis-agent_x86_64.zip * && rm aegis-agent_x86_64;
