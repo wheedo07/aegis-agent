@@ -14,6 +14,9 @@ typedef struct {
 class AegisHttpServer {
     private:
         CURL *curl;
+
+        string build_json(AegisMessage msg);
+        size_t write_cb(char *ptr, size_t size, size_t nmemb, void *userdata);
         
     public:
         AegisHttpServer();
