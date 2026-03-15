@@ -2,7 +2,7 @@
 #define __AEGIS_AGENT_H__
 #include "agent.config.h"
 
-#define AEGIS_AGENT_VERSION "0.0.1"
+#define AEGIS_AGENT_VERSION "0.0.2"
 typedef struct {
     string control_url = "http://localhost:8080";
     AgentConfig config;

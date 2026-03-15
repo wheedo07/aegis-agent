@@ -13,7 +13,7 @@ AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
     AegisHttpResponse response;
     if(!curl) return response;
 
-    string url = msg.control_url + AEGIS_HTTP_API_PATH;
+    string url = msg.control_url + AEGIS_HTTP_API_CHECK;
     string body = build_json(msg);
     string response_string;
 
