@@ -27,6 +27,7 @@ typedef struct {
     string x_forwarded_for;
     string protocol;
     string control_url;
+    int status_code = 0;
     long timestamp;
     
     bool valid() {

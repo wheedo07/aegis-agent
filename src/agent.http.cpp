@@ -51,7 +51,8 @@ AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
     if(root.isMember("action") && root["action"].asString() == "BLOCK") {
         response.block = true;
         response.reason = root.get("reason", "Blocked by control server").asString();
-    }else {
+        response.ttl = root.get("ttl", 300).asInt();
+    } else {
         response.block = false;
     }
 
@@ -70,6 +71,7 @@ string AegisHttpServer::build_json(AegisMessage msg) {
     root["referer"] = msg.referer;
     root["x_forwarded_for"] = msg.x_forwarded_for;
     root["protocol"] = msg.protocol;
+    root["status_code"] = msg.status_code;
     root["timestamp"] = (Json::Int64)msg.timestamp;
 
     Json::StreamWriterBuilder builder;

@@ -4,7 +4,7 @@
 
 /* 모듈 등록 */
 static void aegis_register_hooks(apr_pool_t *p) {
-    ap_hook_access_checker(aegis_access_checker, NULL, NULL, APR_HOOK_MIDDLE);
+    ap_hook_log_transaction(aegis_log_transaction, NULL, NULL, APR_HOOK_MIDDLE);
 }
 
 static const command_rec aegis_cmds[] = {

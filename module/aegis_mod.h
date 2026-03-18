@@ -4,21 +4,18 @@
 #include "http_config.h"
 
 /* 모듈 메타데이터 */
-#define AEGIS_MODULE_NAME    "aegis-mod"
-#define AEGIS_MODULE_VERSION "0.0.1"
+#define AEGIS_MODULE_NAME "aegis-mod"
+#define AEGIS_MODULE_VERSION "0.0.2"
 
 /* apache 디폴트 설정 */
-#define AEGIS_DEFAULT_SOCKET   "/var/run/aegis/agent.sock"
-#define AEGIS_DEFAULT_TIMEOUT  200
+#define AEGIS_DEFAULT_SOCKET "/var/run/aegis/agent.sock"
+#define AEGIS_DEFAULT_TIMEOUT 200
 #define AEGIS_DEFAULT_FAIL_OPEN 1
-#define AEGIS_SOCKET_BUF_SIZE  8192
+#define AEGIS_SOCKET_BUF_SIZE 8192
 
 /* aegis-mod 설정 구조체 */
 typedef struct {
-    /* agent 설정 */
     const char *control_url; // agent가 데이터를 보낼 url
-
-    /* 기본값이 있는 설정 */
     int timeout_ms; // agent 응답 최대 대기 시간 (ms)
     int fail_open; // agent의 오류가 발생할시 들어오는 요청들을 차단할지 말지
     const char *agent_socket; // 유닉스 소켓 경로

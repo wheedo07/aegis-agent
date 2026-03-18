@@ -1,8 +1,9 @@
 #ifndef __AEGIS_AGENT_H__
 #define __AEGIS_AGENT_H__
 #include "agent.config.h"
+using namespace std;
 
-#define AEGIS_AGENT_VERSION "0.0.2"
+#define AEGIS_AGENT_VERSION "0.0.3"
 typedef struct {
     string control_url = "http://localhost:8080";
     AgentConfig config;
@@ -24,6 +25,8 @@ class AegisAgent {
 
         void start();
         void stop();
+
+        void ipset_block(string ip, int ttl);
 };
 
 #endif

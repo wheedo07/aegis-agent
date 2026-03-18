@@ -12,6 +12,7 @@ using namespace std;
 typedef struct {
     bool block = false;
     string reason;
+    int ttl = 300; // 차단 유지 시간(초)
 } AegisHttpResponse;
 
 class AegisHttpServer {

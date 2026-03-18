@@ -149,6 +149,12 @@ bool AegisSocketServer::parse_message(const char *buf, size_t len, AegisMessage 
             out.protocol = value;
         }else if(key == "control_url") {
             out.control_url = value;
+        }else if(key == "status_code") {
+            try {
+                out.status_code = stoi(value);
+            } catch(...) {
+                out.status_code = 0;
+            }
         }else if(key == "timestamp") {
             try {
                 out.timestamp = stol(value);

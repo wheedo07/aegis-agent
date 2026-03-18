@@ -2,11 +2,11 @@
 #include "aegis_mod.h"
 
 void *config_aegis_server_create(apr_pool_t *p, server_rec *s) {
-    aegis_server_cfg *cfg    = apr_pcalloc(p, sizeof(aegis_server_cfg));
+    aegis_server_cfg *cfg = apr_pcalloc(p, sizeof(aegis_server_cfg));
     cfg->agent_socket = AEGIS_DEFAULT_SOCKET;
-    cfg->timeout_ms   = AEGIS_DEFAULT_TIMEOUT;
-    cfg->fail_open    = AEGIS_DEFAULT_FAIL_OPEN;
-    cfg->control_url  = NULL;
+    cfg->timeout_ms = AEGIS_DEFAULT_TIMEOUT;
+    cfg->fail_open = AEGIS_DEFAULT_FAIL_OPEN;
+    cfg->control_url = NULL;
     return cfg;
 }
 void *config_aegis_dir_create(apr_pool_t *p, char *dir) {
@@ -16,7 +16,7 @@ void *config_aegis_dir_create(apr_pool_t *p, char *dir) {
 }
 void *config_aegis_dir_merge(apr_pool_t *p, void *base, void *add) {
     aegis_dir_cfg *parent = (aegis_dir_cfg*) base;
-    aegis_dir_cfg *child  = (aegis_dir_cfg*) add;
+    aegis_dir_cfg *child = (aegis_dir_cfg*) add;
     aegis_dir_cfg *merged = apr_pcalloc(p, sizeof(aegis_dir_cfg));
 
     /* 자식 디렉토리에 명시된 값 우선 */
