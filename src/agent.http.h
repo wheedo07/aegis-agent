@@ -6,9 +6,7 @@
 #include<string>
 using namespace std;
 
-#define AEGIS_HTTP_API_CHECK "/api/agent/check"
 #define AEGIS_HTTP_TIMEOUT_MS 2000L
-
 typedef struct {
     bool block = false;
     string reason;
@@ -20,13 +18,13 @@ class AegisHttpServer {
         CURL *curl;
 
         static size_t write_cb(char *ptr, size_t size, size_t nmemb, void *userdata);
-        static string build_json(AegisMessage msg);
         
     public:
         AegisHttpServer();
         ~AegisHttpServer();
 
-        AegisHttpResponse handle_request(AegisMessage msg);
+        bool post(string url, string body, Json::Value &response_json);
+        string message_build(AegisMessage msg);
 };
 
 #endif

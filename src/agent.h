@@ -1,6 +1,7 @@
 #ifndef __AEGIS_AGENT_H__
 #define __AEGIS_AGENT_H__
 #include "agent.config.h"
+#include "agent.api.h"
 using namespace std;
 
 #define AEGIS_AGENT_VERSION "0.0.3"
@@ -12,12 +13,15 @@ typedef struct {
 class AegisSocketServer;
 class AegisHttpServer;
 class AegisAgent {
+    public:
+        AgentContext context;
+
     private:
         AegisSocketServer *socket_server;
         AegisHttpServer *http_server;
 
-    public:
-        AgentContext context;
+        void ipset_block(string ip, int ttl);
+        MessageResponse handle_message(AegisMessage msg);
 
     public:
         AegisAgent();
@@ -25,8 +29,6 @@ class AegisAgent {
 
         void start();
         void stop();
-
-        void ipset_block(string ip, int ttl);
 };
 
 #endif

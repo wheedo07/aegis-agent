@@ -37,7 +37,6 @@ bool AegisSocketServer::start() {
     chmod(socket_path.c_str(), 0666);
 
     running = true;
-
     for(int i=0; i < AEGIS_WORKER_COUNT; i++) {
         workers.emplace_back(&AegisSocketServer::loop, this);
     }

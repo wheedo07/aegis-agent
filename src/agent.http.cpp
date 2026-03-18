@@ -1,4 +1,5 @@
 #include "agent.http.h"
+#include "agent.api.h"
 #include<sstream>
 
 AegisHttpServer::AegisHttpServer() {
@@ -9,12 +10,8 @@ AegisHttpServer::~AegisHttpServer() {
     if(curl) curl_easy_cleanup(curl);
 }
 
-AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
-    AegisHttpResponse response;
-    if(!curl) return response;
-
-    string url = msg.control_url + AEGIS_HTTP_API_CHECK;
-    string body = build_json(msg);
+bool AegisHttpServer::post(string url, string body, Json::Value &response_json) {
+    if(!curl) return false;
     string response_string;
 
     curl_easy_reset(curl);
@@ -32,34 +29,22 @@ AegisHttpResponse AegisHttpServer::handle_request(AegisMessage msg) {
 
     CURLcode res = curl_easy_perform(curl);
     curl_slist_free_all(headers);
-
     if(res != CURLE_OK) {
         fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-        return response;
+        return false;
     }
 
-    Json::Value root;
-    Json::CharReaderBuilder builder;
     string errs;
-
+    Json::CharReaderBuilder builder;
     istringstream ss(response_string);
-    if(!Json::parseFromStream(builder, ss, &root, &errs)) {
+    if(!Json::parseFromStream(builder, ss, &response_json, &errs)) {
         fprintf(stderr, "Failed to parse JSON response: %s\n", errs.c_str());
-        return response;
+        return false;
     }
-
-    if(root.isMember("action") && root["action"].asString() == "BLOCK") {
-        response.block = true;
-        response.reason = root.get("reason", "Blocked by control server").asString();
-        response.ttl = root.get("ttl", 300).asInt();
-    } else {
-        response.block = false;
-    }
-
-    return response;
+    return true;
 }
 
-string AegisHttpServer::build_json(AegisMessage msg) {
+string AegisHttpServer::message_build(AegisMessage msg) {
     Json::Value root;
     root["ip"] = msg.ip;
     root["method"] = msg.method;
