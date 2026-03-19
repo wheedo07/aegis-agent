@@ -11,7 +11,6 @@ void *config_aegis_dir_merge(apr_pool_t *p, void *base, void *add);
 
 /* 지시자 핸들러 setter */
 const char *cfg_aegis_enabled(cmd_parms *cmd, void *dcfg, int flag);
-const char *cfg_control_url(cmd_parms *cmd, void *dcfg, const char *url);
 const char *cfg_agent_socket(cmd_parms *cmd, void *dcfg, const char *path);
 const char *cfg_timeout(cmd_parms *cmd, void *dcfg, const char *val);
 const char *cfg_fail_open(cmd_parms *cmd, void *dcfg, int flag);

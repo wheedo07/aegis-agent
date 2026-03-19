@@ -15,7 +15,6 @@
 
 /* aegis-mod 설정 구조체 */
 typedef struct {
-    const char *control_url; // agent가 데이터를 보낼 url
     int timeout_ms; // agent 응답 최대 대기 시간 (ms)
     int fail_open; // agent의 오류가 발생할시 들어오는 요청들을 차단할지 말지
     const char *agent_socket; // 유닉스 소켓 경로

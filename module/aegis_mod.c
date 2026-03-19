@@ -15,12 +15,6 @@ static const command_rec aegis_cmds[] = {
         "Enable Aegis request collection in this directory/location (On|Off)"
     ),
     AP_INIT_TAKE1(
-        "AegisControlURL",
-        cfg_control_url, NULL,
-        RSRC_CONF,
-        "URL of aegis-server that the agent will forward data to"
-    ),
-    AP_INIT_TAKE1(
         "AegisAgentSocket",
         cfg_agent_socket, NULL,
         RSRC_CONF,

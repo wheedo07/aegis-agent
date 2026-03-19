@@ -4,10 +4,10 @@
 #include<vector>
 #include<thread>
 #include<mutex>
-#include<condition_variable>
 #include<queue>
 #include<atomic>
 #include<functional>
+#include<condition_variable>
 using namespace std;
 
 #define AEGIS_RECV_BUF_SIZE 8192
@@ -26,12 +26,11 @@ typedef struct {
     string referer;
     string x_forwarded_for;
     string protocol;
-    string control_url;
     int status_code = 0;
     long timestamp;
     
     bool valid() {
-        return !ip.empty() && !uri.empty() && !control_url.empty();
+        return !ip.empty() && !uri.empty();
     }
 } AegisMessage;
 

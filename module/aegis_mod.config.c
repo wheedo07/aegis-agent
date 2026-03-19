@@ -6,7 +6,6 @@ void *config_aegis_server_create(apr_pool_t *p, server_rec *s) {
     cfg->agent_socket = AEGIS_DEFAULT_SOCKET;
     cfg->timeout_ms = AEGIS_DEFAULT_TIMEOUT;
     cfg->fail_open = AEGIS_DEFAULT_FAIL_OPEN;
-    cfg->control_url = NULL;
     return cfg;
 }
 void *config_aegis_dir_create(apr_pool_t *p, char *dir) {
@@ -29,11 +28,6 @@ void *config_aegis_dir_merge(apr_pool_t *p, void *base, void *add) {
 const char *cfg_aegis_enabled(cmd_parms *cmd, void *dcfg, int flag) {
     aegis_dir_cfg *dir = (aegis_dir_cfg*) dcfg;
     dir->enabled = flag;
-    return NULL;
-}
-const char *cfg_control_url(cmd_parms *cmd, void *dcfg, const char *url) {
-    aegis_server_cfg *cfg = ap_get_module_config(cmd->server->module_config, &aegis_module);
-    cfg->control_url = apr_pstrdup(cmd->pool, url);
     return NULL;
 }
 const char *cfg_agent_socket(cmd_parms *cmd, void *dcfg, const char *path) {

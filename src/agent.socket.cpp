@@ -146,8 +146,6 @@ bool AegisSocketServer::parse_message(const char *buf, size_t len, AegisMessage 
             out.x_forwarded_for = value;
         }else if(key == "protocol") {
             out.protocol = value;
-        }else if(key == "control_url") {
-            out.control_url = value;
         }else if(key == "status_code") {
             try {
                 out.status_code = stoi(value);

@@ -1,6 +1,7 @@
 #include "agent.config.h"
 #include<iostream>
 #include<fstream>
+using namespace std;
 
 static string trim(string s) {
     size_t b = s.find_first_not_of(" \t");
@@ -33,6 +34,10 @@ AgentConfig load_config(string config_path) {
         
         if(key == "agent_socket_path") {
             config.agent_socket_path = value;
+        }else if(key == "agent_host_name") {
+            config.host_name = value;
+        }else if(key == "agent_control_url") {
+            config.control_url = value;
         }
     }
     

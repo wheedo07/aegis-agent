@@ -3,6 +3,7 @@
 #include "agent.socket.h"
 #include<cstdio>
 #include<iostream>
+using namespace std;
 
 AegisAgent::AegisAgent() {
     socket_server = nullptr;
@@ -12,9 +13,10 @@ AegisAgent::AegisAgent() {
 AegisAgent::~AegisAgent() {}
 
 void AegisAgent::start() {
-    socket_server = new AegisSocketServer(context.config.agent_socket_path);
+    socket_server = new AegisSocketServer(config.agent_socket_path);
     http_server = new AegisHttpServer();
 
+    register_agent();
     socket_server->on_message([this](AegisMessage msg) {
         MessageResponse result = handle_message(msg);
         if(result.block) {
@@ -25,11 +27,43 @@ void AegisAgent::start() {
     if(socket_server->start()) printf("[aegis-agent] Agent successfully shut down\n");
 }
 
+void AegisAgent::register_agent() {
+    string url = config.control_url + AEGIS_HTTP_API_REGISTER;
+    Json::Value body;
+    body["agent_name"] = config.host_name;
+    body["agent_version"] = AEGIS_AGENT_VERSION;
+
+    Json::Value json;
+    if(!http_server->post(url, body, json)) {
+        fprintf(stderr, "Failed to register agent with control server\n");
+        return;
+    }
+
+    if(json.isMember("status") && json["status"].asBool()) {
+        printf("[aegis-agent] %s", json.get("message", "Agent registered successfully").asString().c_str());
+    }else {
+        fprintf(stderr, "Control server registration failed: %s\n", json.get("error", "Unknown error").asString().c_str());
+    }
+}
+
 MessageResponse AegisAgent::handle_message(AegisMessage msg) {
     MessageResponse response;
 
-    string url = msg.control_url + AEGIS_HTTP_API_CHECK;
-    string body = http_server->message_build(msg);
+    string url = config.control_url + AEGIS_HTTP_API_CHECK;
+    Json::Value body;
+    body["ip"] = msg.ip;
+    body["method"] = msg.method;
+    body["uri"] = msg.uri;
+    body["host"] = msg.host;
+    body["query"] = msg.query;
+    body["user_agent"] = msg.user_agent;
+    body["content_type"] = msg.content_type;
+    body["referer"] = msg.referer;
+    body["x_forwarded_for"] = msg.x_forwarded_for;
+    body["protocol"] = msg.protocol;
+    body["status_code"] = msg.status_code;
+    body["timestamp"] = (Json::Int64)msg.timestamp;
+
     Json::Value json;
     if(!http_server->post(url, body, json)) {
         fprintf(stderr, "Failed to send POST request to control server\n");

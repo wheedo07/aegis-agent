@@ -1,5 +1,6 @@
 #include "agent.h"
 #include<csignal>
+using namespace std;
 AegisAgent *agent = new AegisAgent();
 
 static void signal_handler(int sig) {
@@ -15,7 +16,7 @@ int main(int argc, char *argv[]) {
             config_path = argv[2];
         }
     }
-    agent->context.config = load_config(config_path);
+    agent->config = load_config(config_path);
 
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);

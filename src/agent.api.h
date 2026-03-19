@@ -1,9 +1,10 @@
 #ifndef __AEGIS_AGENT_API_H__
 #define __AEGIS_AGENT_API_H__
+#include<string>
 
 typedef struct {
     bool block = false;
-    string reason;
+    std::string reason;
     int ttl = 300; // 차단 유지 시간(초)
 } MessageResponse;
 

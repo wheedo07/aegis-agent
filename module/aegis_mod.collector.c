@@ -51,7 +51,7 @@ int aegis_log_transaction(request_rec *r) {
     if(!dir || !dir->enabled) return DECLINED;
 
     aegis_server_cfg *cfg = ap_get_module_config(r->server->module_config, &aegis_module);
-    if(!cfg || !cfg->control_url) return DECLINED;
+    if(!cfg) return DECLINED;
 
     /* 내부 서브리퀘스트 제외 */
     if(r->main) return DECLINED;
@@ -80,7 +80,6 @@ int aegis_log_transaction(request_rec *r) {
         "referer=%s\n"
         "x_forwarded_for=%s\n"
         "protocol=%s\n"
-        "control_url=%s\n"
         "status_code=%d\n"
         "timestamp=%ld\n"
         "\n",
@@ -92,7 +91,6 @@ int aegis_log_transaction(request_rec *r) {
         r->args ? r->args : "",
         ua, ct, cl, ref, xff,
         r->protocol ? r->protocol : "",
-        cfg->control_url,
         r->status,
         (long)apr_time_sec(apr_time_now())
     );
