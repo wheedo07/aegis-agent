@@ -10,11 +10,11 @@
 #define CONFIG_DEFAULT_AGENT_HOST_NAME "ErrorHost"
 #define CONFIG_DEFAULT_AGENT_CONTROL_URL "http://localhost:8080"
 
-typedef struct {
+struct AgentConfig {
     std::string control_url = CONFIG_DEFAULT_AGENT_CONTROL_URL;
     std::string host_name = CONFIG_DEFAULT_AGENT_HOST_NAME;
     std::string agent_socket_path = CONFIG_DEFAULT_AGENT_SOCKET_PATH;
-} AgentConfig;
+};
 
 AgentConfig load_config(std::string config_path = AEGIS_AGENT_CONFIG_PATH);
 

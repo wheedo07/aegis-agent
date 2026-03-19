@@ -13,7 +13,7 @@ using namespace std;
 #define AEGIS_RECV_BUF_SIZE 8192
 #define AEGIS_WORKER_COUNT 4
 
-typedef struct {
+struct AegisMessage {
     string version;
     string ip;
     string method;
@@ -32,7 +32,7 @@ typedef struct {
     bool valid() {
         return !ip.empty() && !uri.empty();
     }
-} AegisMessage;
+};
 
 class AegisSocketServer {
     private:
